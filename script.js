@@ -137,7 +137,7 @@ GameController.prototype.gameBoxClicked = function(e) {
         this.displayObj.displayMark(target, currentPlayer);
         let nextPlayer = this.logicObj.updateGameboard(index);
 
-        if (this.logicObj.isWinner) {
+        if (this.logicObj.isWinner()) {
             this.displayObj.displayWin
             (this.logicObj.getWinner, this.logicObj.getWinnerString);
         } else {
