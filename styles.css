@@ -1,0 +1,66 @@
+* {
+    font-family: Avenir, Montserrat, Corbel, "URW Gothic", source-sans-pro, sans-serif;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    margin: 0;
+}
+
+.header {
+    background-color: #FFDB58;
+    font-size: xx-large;
+    text-align: center;
+}
+
+.content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    flex-grow: 1;
+    text-align: center;
+}
+
+.content > div:first-child {
+    display: flex;
+}
+
+.content p:first-child {
+    font-size: xx-large;
+    font-weight: bold;
+}
+
+p + img {
+    width: 50px;
+}
+
+.grid {
+    display: grid;
+    grid-template-rows: repeat(3, clamp(100px, 16vw, 150px));
+    grid-template-columns: repeat(3, clamp(100px, 16vw, 150px));
+    gap: 8px;
+    background-color: lightgray;
+    width: min-content;
+    padding: 8px;
+    border-radius: 15px;
+}
+
+.grid img[src$="circle-outline.svg"] {
+    width: 85%;
+}
+
+.content p:last-child {
+    font-size: large;
+    font-style: italic;
+}
+
+.grid div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: darkgray;
+    border-radius: 10px;
+}
