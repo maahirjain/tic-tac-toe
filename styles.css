@@ -24,16 +24,16 @@ body {
     text-align: center;
 }
 
-.content > div:first-child {
+.content > div:first-child, dialog div {
     display: flex;
 }
 
-.content p:first-child {
+.content p:first-child, dialog p {
     font-size: xx-large;
     font-weight: bold;
 }
 
-p + img {
+p + img, dialog img {
     width: 50px;
 }
 
@@ -63,4 +63,34 @@ p + img {
     align-items: center;
     background-color: darkgray;
     border-radius: 10px;
+}
+
+dialog {
+    visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: min-content;
+    border: none;
+    border-radius: 10px;
+}
+
+dialog::backdrop {
+    background-color: rgba(0, 0, 0, 0.75);
+}
+
+dialog p {
+    margin: 0;
+}
+
+button {
+    font-size: large;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px black;
+}
+
+button:hover, .grid div:hover {
+    background-color: #636363;
+    color: white;
 }
