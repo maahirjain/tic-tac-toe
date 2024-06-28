@@ -156,6 +156,10 @@ DisplayController.prototype.displayTie = function() {
     },1000);
 }
 
+DisplayController.prototype.resetDialogDiv = function() {
+    document.querySelector("dialog div").innerHTML = "<img src=\"./window-close.svg\" alt=\"X icon\"><p>wins!</p>";
+}
+
 DisplayController.prototype.closeModal = function() {
     let dialog = document.querySelector("dialog");
 
@@ -202,11 +206,13 @@ GameController.prototype.playGame = function() {
     document.querySelector("#play-again").addEventListener("click", () => {
         this.displayObj.closeModal();
         this.displayObj.displayReset();
+        this.displayObj.resetDialogDiv();
         this.logicObj.resetGame();
     })
 
     document.querySelector("#back").addEventListener("click", () => {
         this.displayObj.closeModal();
+        this.displayObj.resetDialogDiv();
 
         for(child of Array.from(document.querySelectorAll(".grid div"))) {
             child.removeEventListener("click", this.gameBoxClickedHandler);
