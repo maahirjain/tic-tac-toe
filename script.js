@@ -18,6 +18,17 @@ LogicController.prototype.updateGameboard = function(index) {
     return this.currentPlayer;
 }
 
+LogicController.prototype.isMatch = function(string, substring) {
+    let letters = [...string];
+    return [...substring].every(x => {
+        let index = letters.indexOf(x);
+        if (~index) {
+            letters.splice(index, 1);
+            return true;
+        }
+    });
+}
+
 LogicController.prototype.getWinnerAndString = function() {
     const winnerStrings = ["012", "345", "678", "036", "147", "258", "048", "246"];
 
@@ -29,20 +40,21 @@ LogicController.prototype.getWinnerAndString = function() {
         else if (this.gameboard[i] === "O") { OString += i; }
     }
 
-    const winnerXStringIndex = winnerStrings.indexOf(XString);
-    const winnerOStringIndex = winnerStrings.indexOf(OString);
+    for (winnerString of winnerStrings) {
+        if (this.isMatch(XString, winnerString)) { 
+            return { 
+                winner: "X", 
+                winnerString: winnerString
+            }; 
+        } else if (this.isMatch(OString, winnerString)) { 
+            return { 
+                winner: "O", 
+                winnerString: winnerString
+            }; 
+        } 
+    }
 
-    if (winnerXStringIndex !== -1) { 
-        return { 
-            winner: "X", 
-            winnerString: winnerStrings[winnerXStringIndex] 
-        }; 
-    } else if (winnerOStringIndex !== -1) { 
-        return { 
-            winner: "O", 
-            winnerString: winnerStrings[winnerOStringIndex] 
-        }; 
-    } else { return null; }
+    return null;
 }
 
 LogicController.prototype.getWinner = function() {
@@ -64,8 +76,12 @@ DisplayController.prototype.targetToIndex = function(target) {
 }
 
 DisplayController.prototype.displayIllegal = function(target) {
+    target = target.parentNode.classList.contains("grid") ? target : target.parentNode;
+
+    target.classList.add("red-bg");
+    
     setTimeout(function(){
-        target.style.backgroundColor = "red";
+       target.classList.remove("red-bg");
    },1000);
 }
 
@@ -84,11 +100,12 @@ DisplayController.prototype.displayTurn = function(nextPlayer) {
 DisplayController.prototype.displayWin = function(winner, winnerString) {
     for (let i = 0; i < winnerString.length; i++) {
         let gameBoxIndex = +winnerString.charAt(i);
-        let gameBox = document.querySelector(`div[data-index=${gameBoxIndex}]`);
+        let gameBox = document.querySelector(`div[data-index="${gameBoxIndex}"]`);
 
-        gameBox.style.backgroundColor = "green";
+        gameBox.classList.add("green-bg");
     }
 
+    let dialog = document.querySelector("dialog");
     let img = document.querySelector("dialog img");
 
     if (winner === "X") {
@@ -99,7 +116,11 @@ DisplayController.prototype.displayWin = function(winner, winnerString) {
         img.setAttribute("alt", "O icon");
     }
 
-    document.querySelector("dialog").showModal();
+    dialog.showModal();
+
+    setTimeout(function(){
+        dialog.style.visibility = "visible";
+    },1000);
 }
 
 DisplayController.prototype.displayMark = function(target, currentPlayer) {
@@ -115,11 +136,15 @@ DisplayController.prototype.displayReset = function() {
 
     for(child of Array.from(document.querySelectorAll(".grid div"))) {
         child.innerHTML = "";
+        child.classList.remove("green-bg");
     }
 }
 
 DisplayController.prototype.closeModal = function() {
-    document.querySelector("dialog").close();
+    let dialog = document.querySelector("dialog");
+
+    dialog.close();
+    dialog.style.visibility = "hidden";
 }
 
 function GameController() {
@@ -140,8 +165,7 @@ GameController.prototype.gameBoxClicked = function(e) {
         let nextPlayer = this.logicObj.updateGameboard(index);
 
         if (this.logicObj.isWinner()) {
-            this.displayObj.displayWin
-            (this.logicObj.getWinner, this.logicObj.getWinnerString);
+            this.displayObj.displayWin(this.logicObj.getWinner(), this.logicObj.getWinnerString());
         } else {
             this.displayObj.displayTurn(nextPlayer);
         }
@@ -149,17 +173,24 @@ GameController.prototype.gameBoxClicked = function(e) {
 }
 
 GameController.prototype.playGame = function() {
+    this.gameBoxClickedHandler = this.gameBoxClicked.bind(this);
+
     for(child of Array.from(document.querySelectorAll(".grid div"))) {
-        child.addEventListener("click", (e) => this.gameBoxClicked(e));
+        child.addEventListener("click", this.gameBoxClickedHandler);
     }
 
     document.querySelector("#play-again").addEventListener("click", () => {
         this.displayObj.closeModal();
         this.displayObj.displayReset();
+        this.logicObj.resetGame();
     })
 
     document.querySelector("#back").addEventListener("click", () => {
         this.displayObj.closeModal();
+
+        for(child of Array.from(document.querySelectorAll(".grid div"))) {
+            child.removeEventListener("click", this.gameBoxClickedHandler);
+        }
     })
 }
 

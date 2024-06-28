@@ -37,6 +37,10 @@ p + img, dialog img {
     width: 50px;
 }
 
+dialog img {
+    margin-right: 8px;
+}
+
 .grid {
     display: grid;
     grid-template-rows: repeat(3, clamp(100px, 16vw, 150px));
@@ -90,7 +94,15 @@ button {
     box-shadow: 2px 2px 5px black;
 }
 
-button:hover, .grid div:hover {
+button:hover, .div-hover:hover {
     background-color: #636363;
     color: white;
+}
+
+.red-bg.red-bg {
+    background-color: red;
+}
+
+.green-bg.green-bg {
+    background-color: green;
 }
