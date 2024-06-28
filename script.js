@@ -69,6 +69,10 @@ LogicController.prototype.isWinner = function() {
     return this.getWinnerAndString() !== null;
 }
 
+LogicController.prototype.isTie = function() {
+    return this.gameboard.every(str => str !== "");
+}
+
 function DisplayController() {}
 
 DisplayController.prototype.targetToIndex = function(target) {
@@ -140,6 +144,18 @@ DisplayController.prototype.displayReset = function() {
     }
 }
 
+DisplayController.prototype.displayTie = function() {
+    let dialog = document.querySelector("dialog");
+
+    document.querySelector("dialog div").innerHTML = "<p>It's a tie!</p>";
+
+    dialog.showModal();
+
+    setTimeout(function(){
+        dialog.style.visibility = "visible";
+    },1000);
+}
+
 DisplayController.prototype.closeModal = function() {
     let dialog = document.querySelector("dialog");
 
@@ -167,7 +183,11 @@ GameController.prototype.gameBoxClicked = function(e) {
         if (this.logicObj.isWinner()) {
             this.displayObj.displayWin(this.logicObj.getWinner(), this.logicObj.getWinnerString());
         } else {
-            this.displayObj.displayTurn(nextPlayer);
+            if (this.logicObj.isTie()) {
+                this.displayObj.displayTie();
+            } else {
+                this.displayObj.displayTurn(nextPlayer);
+            }
         }
     }
 }
