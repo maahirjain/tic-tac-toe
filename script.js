@@ -70,12 +70,14 @@ DisplayController.prototype.displayIllegal = function(target) {
 }
 
 DisplayController.prototype.displayTurn = function(nextPlayer) {
-    let yourTurnText = document.querySelector(".content p:first-child");
+    let yourTurnImg = document.querySelector(".content img");
 
     if (nextPlayer === "X") {
-        yourTurnText.innerHTML = "Your turn: <img src=\"./window-close.svg\" alt=\"X icon\">";
+        yourTurnImg.setAttribute("src", "./window-close.svg");
+        yourTurnImg.setAttribute("alt", "X icon");
     } else {
-        yourTurnText.innerHTML = "Your turn: <img src=\"./circle-outline.svg\" alt=\"O icon\">";
+        yourTurnImg.setAttribute("src", "./circle-outline.svg");
+        yourTurnImg.setAttribute("alt", "O icon");
     }
 }
 
