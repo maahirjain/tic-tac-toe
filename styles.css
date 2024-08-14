@@ -107,3 +107,7 @@ button:hover, .div-hover:hover {
 .green-bg.green-bg {
     background-color: green;
 }
+
+a {
+    color: black;
+}
